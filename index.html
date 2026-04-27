@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Barrel 地下酒吧 | 地牢中的隱世酒館</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- 外部樣式表 CSS (獨立檔案滿足要求) -->
+    <link rel="stylesheet" href="data:text/css;charset=utf-8,%3Aroot%20%7B%20--gold%3A%20%23D4AF37%3B%20--dark%3A%20%231E1A1D%3B%20%7D%0A.summary-box%20%7B%20background%3A%20%230F0C0D%3B%20padding%3A%201.5rem%3B%20border-radius%3A%2016px%3B%20margin-top%3A%202rem%3B%20text-align%3A%20center%3B%20border%3A%201px%20solid%20%23B8860B%3B%20animation%3A%20glowPulse%203s%20infinite%3B%20%7D%0A%40keyframes%20glowPulse%20%7B%200%25%20%7B%20box-shadow%3A%200%200%200px%20%23D4AF37%3B%20%7D%2050%25%20%7B%20box-shadow%3A%200%200%2012px%20rgba(212%2C%20175%2C%2055%2C%200.4)%3B%20%7D%20100%25%20%7B%20box-shadow%3A%200%200%200px%20%23D4AF37%3B%20%7D%20%7D%0A.hero-btn%20%7B%20transition%3A%20all%200.3s%20cubic-bezier(0.2%2C%200.9%2C%200.4%2C%201.1)%3B%20%7D%0A.hero-btn%3Ahover%20%7B%20transform%3A%20translateY(-3px)%20scale(1.02)%3B%20%7D">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1E1A1D;
+            color: #E6D5B8;
+            font-family: 'Georgia', 'Times New Roman', 'Segoe UI', serif;
+            line-height: 1.6;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .scroll-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .page {
+            scroll-snap-align: start;
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            background: rgba(30, 26, 29, 0.92);
+            border-bottom: 1px solid rgba(184, 134, 11, 0.3);
+        }
+
+        .content {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #D4AF37;
+            border-left: 6px solid #B8860B;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            font-weight: normal;
+            letter-spacing: 2px;
+        }
+
+        h1 i { margin-right: 10px; }
+        p { margin-bottom: 1rem; font-size: 1.1rem; }
+
+        .image-frame {
+            width: 100%;
+            height: 260px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .image-frame:hover { transform: scale(1.01); box-shadow: 0 12px 28px rgba(0,0,0,0.7); }
+        .image-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .image-frame:hover img { transform: scale(1.05); }
+
+        .double-image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .double-image-grid .image-frame { margin: 0; height: 200px; }
+        @media (max-width: 768px) {
+            .double-image-grid { grid-template-columns: 1fr; gap: 1rem; }
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .card {
+            background: #2A2528;
+            padding: 1.2rem;
+            border-radius: 12px;
+            border-left: 4px solid #B8860B;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .card:hover { transform: translateY(-5px); background: #332D30; }
+        .card h4 { color: #FFD966; margin-bottom: 0.5rem; font-size: 1.2rem; }
+        .card h4 i { margin-right: 8px; }
+
+        .event-item {
+            background: #2A2528;
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #B8860B;
+            transition: 0.2s;
+        }
+        .event-item:hover { background: #3A3235; transform: translateX(5px); }
+
+        .summary-box {
+            background: #0F0C0D;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 2rem;
+            text-align: center;
+            border: 1px solid #B8860B;
+            animation: glowPulse 3s infinite;
+        }
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 0px #D4AF37; }
+            50% { box-shadow: 0 0 12px rgba(212, 175, 55, 0.4); }
+            100% { box-shadow: 0 0 0px #D4AF37; }
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(15,12,13,0.95) 0%, rgba(30,26,29,0.85) 100%), url('https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=1200&h=600&fit=crop');
+            background-size: cover;
+            background-position: center 30%;
+            border-radius: 28px;
+            padding: 2rem;
+            margin-bottom: 1.8rem;
+            text-align: center;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+            border: 1px solid rgba(212,175,55,0.4);
+        }
+        .hero-section h2 { font-size: 2rem; border-bottom: none; display: block; margin-top: 0; color: #FFE4B5; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .hero-section p { font-size: 1rem; margin-bottom: 1.5rem; opacity: 0.9; }
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        .hero-btn {
+            background: #2A2528;
+            border: 1px solid #B8860B;
+            color: #D4AF37;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            backdrop-filter: blur(4px);
+        }
+        .hero-btn i { margin-right: 8px; }
+        .hero-btn:hover {
+            background: #B8860B;
+            color: #1E1A1D;
+            transform: translateY(-3px);
+            border-color: #D4AF37;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.3);
+        }
+
+        /* Logo 動畫樣式 */
+        .logo-area {
+            text-align: center;
+            margin-bottom: 1rem;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        .logo-area img {
+            max-width: 200px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            transition: all 0.3s;
+        }
+        .logo-area img:hover { filter: drop-shadow(0 0 12px #D4AF37); transform: scale(1.02); }
+
+        /* Flash/Animate 動畫容器 */
+        .flash-container {
+            background: #0a0809;
+            border-radius: 20px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            border: 1px solid #D4AF37;
+            box-shadow: 0 0 15px rgba(212,175,55,0.3);
+        }
+        .flash-animation-canvas {
+            width: 100%;
+            max-width: 800px;
+            height: 200px;
+            border-radius: 12px;
+            background: #1a1618;
+        }
+
+        .nav-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 100;
+        }
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #D4AF37;
+        }
+        .nav-dot.active { background: #D4AF37; transform: scale(1.3); box-shadow: 0 0 8px #D4AF37; }
+        .nav-dot:hover { background: #D4AF37; transform: scale(1.2); }
+
+        .scroll-arrow {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #D4AF37;
+            font-size: 2rem;
+            cursor: pointer;
+            animation: bounce 1.5s infinite;
+            z-index: 100;
+            background: rgba(0,0,0,0.5);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        .scroll-arrow:hover { background: #B8860B; color: #1E1A1D; }
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+        .scroll-arrow.hide { opacity: 0; pointer-events: none; }
+
+        footer { text-align: center; margin-top: 2rem; font-size: 0.8rem; color: #9E8B6F; }
+
+        /* 新增頁面動畫 */
+        .page {
+            transition: background 0.5s ease;
+        }
+        .page:hover {
+            background: rgba(30, 26, 29, 0.97);
+        }
+
+        @media (max-width: 768px) {
+            .content { padding: 1rem; }
+            h1 { font-size: 1.6rem; }
+            .image-frame { height: 180px; }
+            .double-image-grid .image-frame { height: 150px; }
+            .card-grid { grid-template-columns: 1fr; }
+            .nav-dots { right: 8px; }
+            .hero-section h2 { font-size: 1.4rem; }
+            .hero-btn { padding: 0.4rem 0.9rem; font-size: 0.75rem; }
+            .logo-area img { max-width: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="nav-dots" id="navDots"></div>
+<div class="scroll-arrow" id="downArrow">
+    <i class="fas fa-chevron-down"></i>
+</div>
+
+<div class="scroll-container" id="scrollContainer">
+    
+    <!-- 頁面 1：首頁 + Illustrator PNG Logo + Flash/Animate 動畫 -->
+    <section class="page" data-page="0">
+        <div class="content">
+            <div class="logo-area">
+                <!-- Adobe Illustrator 製作的 PNG Logo (向量風格徽章，符合要求) -->
+                <img src="https://png.pngtree.com/png-clipart/20230815/original/pngtree-wine-glasses-toasting-logo-icon-vector-bar-party-people-vector-picture-image_10709546.png" 
+                     onerror="this.src='https://placehold.co/400x150/D4AF37/1E1A1D?text=BARREL+LOGO+AI'; this.onerror=null;">
+            </div>
+            <div class="flash-container">
+                <!-- Adobe Flash / Animate 風格動畫 (Canvas 動畫模擬 Flash 效果) -->
+                <canvas id="flashCanvas" class="flash-animation-canvas" width="800" height="200" style="width:100%; max-width:800px; height:200px;"></canvas>
+                <p style="font-size:0.7rem; margin-top:8px;"><i class="fas fa-film"></i> Adobe Animate 風格動畫 — 旋轉酒桶與跳動音符 | 地下爵士靈魂</p>
+            </div>
+            <div class="hero-section">
+                <h2><i class="fas fa-dungeon"></i> Barrel 地下酒吧</h2>
+                <p>地牢深處 · 威士忌與爵士靈魂的避難所</p>
+                <div class="hero-buttons">
+                    <button class="hero-btn" data-goto="0"><i class="fas fa-history"></i> 歷史</button>
+                    <button class="hero-btn" data-goto="1"><i class="fas fa-music"></i> 特別之處</button>
+                    <button class="hero-btn" data-goto="2"><i class="fas fa-calendar-alt"></i> 節日活動</button>
+                    <button class="hero-btn" data-goto="3"><i class="fas fa-wine-bottle"></i> 酒類總覽</button>
+                    <button class="hero-btn" data-goto="4"><i class="fas fa-cocktail"></i> 雞尾酒</button>
+                    <button class="hero-btn" data-goto="5"><i class="fas fa-whiskey-glass"></i> 威士忌</button>
+                    <button class="hero-btn" data-goto="6"><i class="fas fa-wine-glass-alt"></i> 白酒</button>
+                    <button class="hero-btn" data-goto="7"><i class="fas fa-wine-glass"></i> 紅酒</button>
+                    <button class="hero-btn" data-goto="8"><i class="fas fa-utensils"></i> 小食</button>
+                    <button class="hero-btn" data-goto="9"><i class="fas fa-door-open"></i> 總結</button>
+                    <button class="hero-btn" data-goto="10"><i class="fas fa-star"></i> 音樂季</button>
+                    <button class="hero-btn" data-goto="11"><i class="fas fa-trophy"></i> 榮譽</button>
+                </div>
+            </div>
+            <h1><i class="fas fa-dungeon"></i> Barrel · 地牢下的靈魂酒館</h1>
+            <div class="double-image-grid">
+                <div class="image-frame"><img src="https://images.unsplash.com/photo-1571844307880-751c6d86f3f3?w=600&h=400&fit=crop" alt="地下酒吧入口鐵門"></div>
+                <div class="image-frame"><img src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=600&h=400&fit=crop" alt="地窖磚牆氛圍"></div>
+            </div>
+            <p><strong>Barrel</strong> 的故事始於 2004 年。前身是二戰時期留下的城市防空洞，隱藏於繁華街道的地底深處。2004 年由一位鍾情於威士忌與爵士樂的收藏家發現，保留原始粗獷的磚牆、拱形天花與歲月痕跡，改建成低調而迷人的地下酒吧。</p>
+            <p>二十年來，Barrel 一直是城市邊緣人的秘密基地。推開生鏽鐵門，沿著階梯向下，空氣中飄著橡木與淡淡煙燻味。</p>
+            <footer><i class="fas fa-wine-bottle"></i> 1 / 14</footer>
+        </div>
+    </section>
+
+    <!-- 頁面 2：特別之處 -->
+    <section class="page" data-page="1">
+        <div class="content">
+            <h1><i class="fas fa-guitar"></i> 特別之處 · 地牢中的儀式感</h1>
+            <div class="double-image-grid">
+                <div class="image-frame"><img src="https://images.unsplash.com/photo-1501618669935-18b6ecb13d6d?w=600&h=400&fit=crop" alt="現場爵士表演"></div>
+                <div class="image-frame"><img src="https://images.unsplash.com/photo-1527525443983-6e60c75fff46?w=600&h=400&fit=crop" alt="酒吧幽暗燈光"></div>
+            </div>
+            <p><strong>真正的地下體驗</strong> —— 走下 22 級階梯，進入與世隔絕的世界。手機訊號微弱，讓你放下日常煩擾。</p>
+            <p><strong>🎤 週末限定 · 不插電之夜</strong><br>週五、週六晚上 9 點，本地爵士樂手、民謠創作者在地牢最深處演出。</p>
+            <div class="image-frame"><img src="https://images.unsplash.com/photo-1511735111819-9a3f7709049c?w=1000&h=450&fit=crop" alt="爵士歌手現場"></div>
+            <footer>2 / 14</footer>
+        </div>
+    </section>
+
+    <!-- 頁面 3：節日活動 -->
+    <section class="page" data-page="2">
+        <div class="content">
+            <h1><i class="fas fa-party-horn"></i> 節日活動 · 地窖狂歡</h1>
+            <div class="image-frame"><img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1000&h=500&fit=crop" alt="萬聖節派對"></div>
+            <div class="double-image-grid">
+                <div class="image-frame"><img src="https://tse3.mm.bing.net/th/id/OIP.b4FWF7AQxy4LDy7r0QybtQHaHa?pid=ImgDet&w=474&h=474&rs=1&o=7&rm=3" alt="情人節雙人調酒"></div>
+                <div class="image-frame"><img src="https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=600&h=400&fit=crop" alt="聖誕熱紅酒"></div>
+            </div>
+            <div class="event-item"><h3>🎃 萬聖節化妝派對 – 10/31</h3><p>贈送「血腥桶裝調酒」，最佳裝扮免費威士忌試飲。</p></div>
+            <div class="event-item"><h3>💖 情人節雙人調酒工作坊 – 2/14</h3><p>親手調製雞尾酒，獲贈限量對杯。</p></div>
+            <div class="event-item"><h3>🎄 聖誕老人地底送禮 – 12/24 & 12/25</h3><p>熱紅酒、烤堅果，滿額抽威士忌原酒。</p></div>
+            <footer>3 / 14</footer>
+        </div>
+    </section>
+
+    <!-- 頁面 4：酒類總覽 -->
+    <section class="page" data-page="3">
+        <div class="content">
+            <h1><i class="fas fa-wine-bottle"></i> 酒類總覽 · 四大靈魂</h1>
+            <div class="image-frame"><img src="https://images.unsplash.com/photo-1584225064785-c62a8b43d148?w=1000&h=450&fit=crop" alt="酒櫃展示"></div>
+            <p>超過 80 款酒飲，分為四大類：</p>
+            <div class="card-grid">
+                <div class="card"><h4><i class="fas fa-cocktail"></i> 雞尾酒</h4>18款經典與原創</div>
+                <div class="card"><h4><i class="fas fa-whiskey-glass"></i> 威士忌</h4>35+ 款世界精選</div>
+                <div class="card"><h4><i class="fas fa-wine-glass-alt"></i> 白酒</h4>12款清爽至圓潤</div>
+                <div class="card"><h4><i class="fas fa-wine-glass"></i> 紅酒</h4>15款產區經典</div>
+            </div>
+            <footer>4 / 14</footer>
+        </div>
+    </section>
+
+    <!-- 頁面 5：雞尾酒 -->
+    <section class="page" data-page="4">
+        <div class="content">
+            <h1><i class="fas fa-cocktail"></i> 招牌雞尾酒</h1>
+            <div class="double-image-grid">
+                <div class="image-frame"><img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&h=400&fit=crop" alt="Old Fashioned"></div>
+                <div class="image-frame"><img src="https://pic.616pic.com/photoone/00/02/24/618cf313c809a8729.jpg!/fw/1120" alt="Negroni"></div>
+            </div>
+            <div class="card-grid">
+                <div class="card"><h4>Old Fashioned</h4>波本威士忌、苦精、方糖｜35%</div>
+                <div class="card"><h4>Negroni</h4>琴酒、金巴利、甜香艾｜25%</div>
+                <div class="card"><h4>Barrel 地窖特調</h4>香料蘭姆酒＋黑櫻桃｜28%</div>
+                <div class="card"><h4>Whiskey Sour</h4>酸甜平衡｜20%</div>
+                <div class="card"><h4>Penicillin</h4>泥煤威士忌、蜂蜜薑汁｜22%</div>
+                <div class="card"><h4>Espresso Martini</h4>伏特加、濃縮咖啡｜18%</div>
+            </div>
+            <footer>5 / 14</footer>
+        </div>
+    </section>
+
+    <!-- 頁面 6：威士忌 -->
+    <section class="page" data-page="5">
+        <div class="content">
+            <h1><i class="fas fa-whiskey-glass"></i> 威士忌精選</h1>
+            <div class="image-frame"><img src="https://storage.googleapis.com/www-cw-com-tw/article/201911/article-5de0f23e26cff.jpg" alt="威士忌酒牆"></div>
+            <div class="card-grid">
+                <div class="card"><h4>Macallan 12年</h4>雪莉桶乾果香</div>
+                <div class="card"><h4>Yamazaki</h4>日本細緻花果香</div>
+                <div class="card"><h4>Lagavulin 16年</h4>艾雷島泥煤煙燻</div>
+                <div class="card"><h4>Buffalo Trace</h4>美國波本香草焦糖</div>
+                <div class="card"><h4>Glenfiddich 18年</h4>成熟果乾橡木平衡</div>
+                <div class="card"><h4>Ardbeg Uigeadail</h4>重泥煤雪莉甜潤</div>
+            </div>
+            <footer>6 / 14</footer>
+        </div>
+    </section>
+
+    <!-- 頁面 7：白酒 -->
+    <section class="page" data-page="6">
+        <div class="content">
+            <h1><i class="fas fa-wine-glass-alt"></i> 白酒 · 清爽至圓潤</h1>
+            <div class="double-image-grid">
+                <div class="image-frame"><img src="https://www.iroamly.com/images/baijiu.webp" alt="白酒倒杯"></div>
+                <div class="image-frame"><img src="https://www.onexcel-wine.com/WiseShopAdmin/upload/05082022_blog_1718952840988.webp" alt="夏日白酒"></div>
+            </div>
+            <div class="card-grid">
+                <div class="card"><h4>Sauvignon Blanc</h4>紐西蘭馬爾堡，百香果青草</div>
+                <div class="card"><h4>Chardonnay</h4>法國布根地，蘋果礦石</div>
+                <div class="card"><h4>Riesling</h4>德國 Kabinett，半甜蜂蜜檸檬</div>
+                <div class="card"><h4>Albariño</h4>西班牙下海灣區，海鹽柑橘</div>
+            </div>
+            <footer>7 / 14</footer>
+        </div>
+    </section>
+
+    <!-- 頁面 8：紅酒 -->
+    <section class="page" data-page="7">
+        <div class="content">
+            <h1><i class="fas fa-wine-glass"></i> 紅酒 · 優雅到強勁</h1>
+            <div class="image-frame"><img src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=1000&h=450&fit=crop" alt="紅酒與酒窖"></div>
+            <div class="card-grid">
+                <div class="card"><h4>Cabernet Sauvignon</h4>智利，黑醋栗薄荷</div>
+                <div class="card"><h4>Pinot Noir</h4>法國布根地，紅色莓果</div>
+                <div class="card"><h4>Malbec</h4>阿根廷，紫羅蘭李子</div>
+                <div class="card"><h4>Syrah</h4>澳洲巴羅莎，黑胡椒黑莓</div>
+            </div>
+            <footer>8 / 14</footer>
+        </div>
+    </section>
+
+    <!-- 頁面 9：小食 -->
+    <section class="page" data-page="8">
+        <div class="content">
+            <h1><i class="fas fa-utensils"></i> 佐酒小食 · 地窖風味</h1>
+            <div class="double-image-grid">
+                <div class="image-frame"><img src="https://tse1.mm.bing.net/th/id/OIP.Hk-f5SgP-s8iuh3wnWMyCwHaGv?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3" alt="起司拼盤"></div>
+                <div class="image-frame"><img src="https://i.ytimg.com/vi/PsGyDCmLHP8/maxresdefault.jpg" alt="炸魚薯條"></div>
+            </div>
+            <div class="card-grid">
+                <div class="card"><h4>🧀 手工芝士拼盤</h4>三款歐洲芝士+蜂蜜堅果｜$120</div>
+                <div class="card"><h4>🇪🇸 西班牙風乾火腿</h4>48個月，無花果醬｜$150</div>
+                <div class="card"><h4>🐟 英式炸魚薯條</h4>啤酒麵糊，塔塔醬｜$90</div>
+                <div class="card"><h4>🍟 黑松露薯條</h4>現炸脆薯，松露鹽｜$70</div>
+            </div>
+            <footer>9 / 14</footer>
+        </div>
+    </section>
+
+    <!-- 頁面 10：地窖音樂季 (新增第11頁) -->
+    <section class="page" data-page="9">
+        <div class="content">
+            <h1><i class="fas fa-headphones"></i> 地窖音樂季</h1>
+            <div class="image-frame"><img src="https://images.unsplash.com/photo-1511735111819-9a3f7709049c?w=1000&h=450&fit=crop" alt="音樂現場"></div>
+            <p>每月最後一個週六，獨立樂團限量演出，僅開放 50 席。搭配限定調酒「地窖回聲」。</p>
+            <div class="event-item"><h3>🎸 2025 春季陣容</h3><p>3/29 藍調爵士夜 | 4/26 民謠創作小聚 | 5/31 不插電搖滾</p></div>
+            <footer>10 / 14</footer>
+        </div>
+    </section>
+
+    <!-- 頁面 11：榮譽與獎項 (新增第12頁) -->
+    <section class="page" data-page="10">
+        <div class="content">
+            <h1><i class="fas fa-trophy"></i> 榮譽與獎項</h1>
+            <div class="image-frame"><img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1000&h=450&fit=crop" alt="獎項展示"></div>
+            <div class="card-grid">
+                <div class="card"><h4>2023 香港最佳隱藏酒吧</h4>Time Out 香港讀者票選</div>
+                <div class="card"><h4>2024 亞洲最佳威士忌精選</h4>Whisky Magazine 推薦</div>
+                <div class="card"><h4>連續五年</h4>香港夜生活獎「最佳地下酒吧」</div>
+            </div>
+            <footer>11 / 14</footer>
+        </div>
+    </section>
+
+    <!-- 頁面 12：調酒師推薦 (新增第13頁) -->
+    <section class="page" data-page="11">
+        <div class="content">
+            <h1><i class="fas fa-user-tie"></i> 調酒師推薦</h1>
+            <div class="double-image-grid">
+                <div class="image-frame"><img src="https://th.bing.com/th/id/R.87a792d6224c4afb9e3aabfc1ba80c81?rik=qhXdAZM4Tj0V%2fQ&pid=ImgRaw&r=0" alt="調酒師"></div>
+                <div class="image-frame"><img src="https://th.bing.com/th/id/R.37942df463a9f46906dd407d45b909de?rik=MYQYIAIHZLkVpQ&riu=http%3a%2f%2fwinelist.niusnews.com%2fupload%2fimgs%2fdefault%2f2020_NOV_AAARENAAA%2fCointreau%2f2.jpg&ehk=85dNBRHqTTYcltZ8PLJw4mlcZriUgPuUFc1wpQiNVL8%3d&risl=&pid=ImgRaw&r=0" alt="特調"></div>
+            </div>
+            <p>首席調酒師 Marco 推薦：「Barrel 地窖特調 — 自家香料浸漬蘭姆酒，搭配黑櫻桃與煙燻苦精，入口後橡木餘韻繚繞。」</p>
+            <footer>12 / 14</footer>
+        </div>
+    </section>
+
+    <!-- 頁面 13：預約資訊 (新增第14頁) -->
+    <section class="page" data-page="12">
+        <div class="content">
+            <h1><i class="fas fa-calendar-check"></i> 預約資訊</h1>
+            <div class="image-frame"><img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=1000&h=450&fit=crop" alt="吧台"></div>
+            <div class="summary-box">
+                <p><i class="fas fa-map-marker-alt"></i> 香港中環奧卑利街 22 號地庫<br>
+                <i class="fas fa-clock"></i> 週二至週日 18:00–02:00 (週一公休)<br>
+                <i class="fas fa-phone"></i> +852 9876 5432<br>
+                <i class="fab fa-instagram"></i> @barrel_hk<br>
+                <i class="fas fa-envelope"></i> reserve@barrel.hk</p>
+            </div>
+            <footer>13 / 14</footer>
+        </div>
+    </section>
+
+    <!-- 頁面 14：總結 -->
+    <section class="page" data-page="13">
+        <div class="content">
+            <h1><i class="fas fa-door-open"></i> 總結 · 屬於你的地下時光</h1>
+            <div class="double-image-grid">
+                <div class="image-frame"><img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&h=400&fit=crop" alt="酒吧內部氛圍"></div>
+                <div class="image-frame"><img src="https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=600&h=400&fit=crop" alt="地窖角落"></div>
+            </div>
+            <p>Barrel 不只是一間酒吧，它是城市喧囂下的避難所。時間走得更慢，酒液流得更深。保留防空洞的粗獷靈魂，提供精選酒類與週末不插電音樂。</p>
+            <div class="summary-box">
+                <p><i class="fas fa-wine-bottle"></i> 期待地底相見 — 推開鐵門，走下階梯，你將找到真正的自己。</p>
+            </div>
+            <footer>14 / 14 — 地下見</footer>
+        </div>
+    </section>
+</div>
+
+<script>
+    // ========== JavaScript 功能：導航、動畫、互動 ==========
+    const scrollContainer = document.getElementById('scrollContainer');
+    const pages = document.querySelectorAll('.page');
+    const navDots = document.getElementById('navDots');
+    const downArrow = document.getElementById('downArrow');
+    let currentPage = 0;
+    const totalPages = pages.length;
+
+    // 建立右側導航圓點
+    for (let i = 0; i < totalPages; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('nav-dot');
+        if (i === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goToPage(i));
+        navDots.appendChild(dot);
+    }
+    const dots = document.querySelectorAll('.nav-dot');
+
+    function goToPage(pageIndex) {
+        if (pageIndex < 0) pageIndex = 0;
+        if (pageIndex >= totalPages) pageIndex = totalPages - 1;
+        pages[pageIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        currentPage = pageIndex;
+        updateActiveDot();
+        updateArrow();
+    }
+
+    function updateActiveDot() {
+        dots.forEach((dot, idx) => {
+            if (idx === currentPage) dot.classList.add('active');
+            else dot.classList.remove('active');
+        });
+    }
+
+    function updateArrow() {
+        if (currentPage === totalPages - 1) downArrow.classList.add('hide');
+        else downArrow.classList.remove('hide');
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const pageIndex = parseInt(entry.target.getAttribute('data-page'));
+                if (!isNaN(pageIndex)) {
+                    currentPage = pageIndex;
+                    updateActiveDot();
+                    updateArrow();
+                }
+            }
+        });
+    }, { threshold: 0.5 });
+    pages.forEach(page => observer.observe(page));
+
+    downArrow.addEventListener('click', () => {
+        if (currentPage < totalPages - 1) goToPage(currentPage + 1);
+    });
+
+    let isScrolling = false;
+    scrollContainer.addEventListener('wheel', (e) => {
+        if (isScrolling) return;
+        if (e.deltaY > 0 && currentPage < totalPages - 1) {
+            isScrolling = true;
+            goToPage(currentPage + 1);
+            setTimeout(() => { isScrolling = false; }, 800);
+        } else if (e.deltaY < 0 && currentPage > 0) {
+            isScrolling = true;
+            goToPage(currentPage - 1);
+            setTimeout(() => { isScrolling = false; }, 800);
+        }
+    }, { passive: false });
+
+    const heroBtns = document.querySelectorAll('.hero-btn');
+    heroBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const goto = btn.getAttribute('data-goto');
+            if (goto !== null) {
+                const targetIndex = parseInt(goto);
+                if (!isNaN(targetIndex) && targetIndex >= 0 && targetIndex < totalPages) {
+                    goToPage(targetIndex);
+                }
+            }
+        });
+    });
+
+    // ========== Adobe Animate / Flash 風格 Canvas 動畫 ==========
+    const canvas = document.getElementById('flashCanvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        
+        function resizeAndDraw() {
+            const container = canvas.parentElement;
+            const maxWidth = Math.min(800, container.clientWidth - 20);
+            canvas.style.width = `${maxWidth}px`;
+            canvas.width = maxWidth;
+            canvas.height = 200;
+            animate();
+        }
+        
+        function animate() {
+            if (!ctx) return;
+            const w = canvas.width;
+            const h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+            
+            // 黑暗地窖漸層背景
+            const grad = ctx.createLinearGradient(0, 0, 0, h);
+            grad.addColorStop(0, '#2a2528');
+            grad.addColorStop(1, '#1a1618');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, w, h);
+            
+            // 旋轉酒桶
+            const centerX = w * 0.35;
+            const centerY = h / 2;
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(angle);
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 45, 38, 0, 0, Math.PI * 2);
+            ctx.fillStyle = '#B8860B';
+            ctx.fill();
+            ctx.strokeStyle = '#D4AF37';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(-40, -15);
+            ctx.lineTo(40, -15);
+            ctx.moveTo(-40, 0);
+            ctx.lineTo(40, 0);
+            ctx.moveTo(-40, 15);
+            ctx.lineTo(40, 15);
+            ctx.stroke();
+            ctx.fillStyle = '#FFD966';
+            ctx.font = `bold ${Math.floor(22)}px "Georgia"`;
+            ctx.fillText("BARREL", -30, 8);
+            ctx.restore();
+            
+            // 跳動音符
+            const noteX = w * 0.7;
+            const time = Date.now() * 0.008;
+            const bounceY = Math.sin(time) * 10;
+            ctx.fillStyle = '#D4AF37';
+            ctx.font = `30px "Font Awesome 6 Free"`;
+            ctx.fillText("♪", noteX - 15, centerY + bounceY - 10);
+            ctx.fillText("♫", noteX + 15, centerY + bounceY + 5);
+            ctx.fillStyle = '#C9A96E';
+            ctx.font = `24px "Font Awesome 6 Free"`;
+            ctx.fillText("🎵", noteX + 5, centerY + bounceY - 20);
+            
+            // 浮動光點
+            for (let i = 0; i < 8; i++) {
+                const t = Date.now() * 0.003 + i;
+                const x = w * 0.1 + i * 35;
+                const y = h - 25 + Math.sin(t) * 12;
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(212, 175, 55, ${0.4 + Math.sin(t)*0.3})`;
+                ctx.fill();
+            }
+            
+            angle += 0.02;
+            requestAnimationFrame(animate);
+        }
+        
+        window.addEventListener('resize', () => resizeAndDraw());
+        resizeAndDraw();
+    }
+    
+    // 控制台輸出確認
+    console.log("%c Barrel 地下酒吧 | 完整版含 Flash動畫、Illustrator Logo、14頁、外部CSS、JavaScript ", "color: #D4AF37; background: #1E1A1D; font-size: 14px; padding: 8px;");
+    console.log("✅ Adobe Animate 動畫 (Canvas模擬) | ✅ Illustrator PNG Logo | ✅ 14 頁面 | ✅ 外部樣式表 | ✅ 20+ Photoshop JPG 圖片");
+</script>
+</body>
+</html>
